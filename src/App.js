@@ -5,6 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import NavBar from './NavBar/NavBar';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import ResponsiveDrawer from "./Drawer/ResponsiveDrawer";
 
 const theme = createMuiTheme({
   typography: {
@@ -26,10 +27,10 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <ResponsiveDrawer></ResponsiveDrawer>
+        {/*<NavBar />*/}
         <div className="App">
-          <CssBaseline />
-          <NavBar />
-
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <p>
