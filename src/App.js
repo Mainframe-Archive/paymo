@@ -11,6 +11,7 @@ const theme = createMuiTheme({
     primary: {
       main: '#0bb634',
       contrastText: '#fff',
+      titleText: '#00c730',
     },
     complementary: {
       main: '#15d642',
@@ -18,7 +19,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#f44336',
-      contrastText: '#000',
+      contrastText: '#999',
     },
   },
 });
