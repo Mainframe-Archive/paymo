@@ -8,7 +8,7 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
-import Divider from '@material-ui/core/Divider';
+// import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -18,6 +18,8 @@ import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import Transactions from '../Transactions/Transactions';
+import Button from '@material-ui/core/Button';
+
 
 const drawerWidth = 240;
 
@@ -52,6 +54,29 @@ const styles = theme => ({
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
   },
+  vertContainer: {
+    display: 'table',
+    height: '100%',
+    position: 'absolute',
+    overflow: 'hidden',
+    width: '100%',
+  },
+  vertHelper: {
+    display: 'table-cell',
+    verticalAlign: 'middle',
+  },
+  vertList: {
+    margin: '0 auto',
+  },
+  button: {
+    // margin: '50% 0',
+    backgroundColor: theme.palette.complementary.main,
+    color: theme.palette.complementary.contrastText,
+  },
+  horizontalCenter: {
+    margin: '15% auto',
+    width: '50%',
+  },
 });
 
 
@@ -69,26 +94,33 @@ class ResponsiveDrawer extends React.Component {
 
     const drawer = (
       <div>
-        <div className={classes.toolbar} />
-        <Divider />
-        <List>
-          <ListItem button key="Activity">
-            <ListItemIcon><AccessTime /></ListItemIcon>
-            <ListItemText>Activity</ListItemText>
-          </ListItem>
-          <ListItem button key="Cash Card">
-            <ListItemIcon><MonetizationOn /></ListItemIcon>
-            <ListItemText>Cash Card</ListItemText>
-          </ListItem>
-          <ListItem button key="Settings">
-            <ListItemIcon><AccountCircle /></ListItemIcon>
-            <ListItemText>Settings</ListItemText>
-          </ListItem>
-          <ListItem button key="Sign Out">
-            <ListItemIcon><RemoveCircleOutline /></ListItemIcon>
-            <ListItemText>Sign Out</ListItemText>
-          </ListItem>
-        </List>
+        <div className={classes.vertContainer}>
+          <div className={classes.vertHelper}>
+            <List className={classes.vertList}>
+              <ListItem button key="Activity">
+                <ListItemIcon><AccessTime /></ListItemIcon>
+                <ListItemText>Activity</ListItemText>
+              </ListItem>
+              <ListItem button key="Cash Card">
+                <ListItemIcon><MonetizationOn /></ListItemIcon>
+                <ListItemText>Cash Card</ListItemText>
+              </ListItem>
+              <ListItem button key="Settings">
+                <ListItemIcon><AccountCircle /></ListItemIcon>
+                <ListItemText>Settings</ListItemText>
+              </ListItem>
+              <ListItem button key="Sign Out">
+                <ListItemIcon><RemoveCircleOutline /></ListItemIcon>
+                <ListItemText>Sign Out</ListItemText>
+              </ListItem>
+            </List>
+            <div className={classes.horizontalCenter}>
+              <Button variant="contained" size="large" className={classes.button}>
+                New
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     );
 
@@ -141,7 +173,7 @@ class ResponsiveDrawer extends React.Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-         <Transactions></Transactions>
+          <Transactions></Transactions>
         </main>
       </div>
     );
