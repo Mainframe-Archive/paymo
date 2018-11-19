@@ -19,7 +19,10 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import Transactions from '../Transactions/Transactions';
 import Button from '@material-ui/core/Button';
+import TransactionModal from '../TransactionModal/TransactionModal';
 
+
+// TODO: Next steps are to create the "New" transaction overlay. It's the dialog for creating a new transaction.
 
 const drawerWidth = 240;
 
@@ -68,11 +71,6 @@ const styles = theme => ({
   vertList: {
     margin: '0 auto',
   },
-  button: {
-    // margin: '50% 0',
-    backgroundColor: theme.palette.complementary.main,
-    color: theme.palette.complementary.contrastText,
-  },
   horizontalCenter: {
     margin: '15% auto',
     width: '50%',
@@ -115,9 +113,7 @@ class ResponsiveDrawer extends React.Component {
               </ListItem>
             </List>
             <div className={classes.horizontalCenter}>
-              <Button variant="contained" size="large" className={classes.button}>
-                New
-              </Button>
+              <TransactionModal />
             </div>
           </div>
         </div>
