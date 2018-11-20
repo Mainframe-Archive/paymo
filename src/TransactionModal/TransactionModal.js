@@ -62,6 +62,7 @@ const styles = theme => ({
 });
 
 class SimpleModal extends React.Component {
+
   state = {
     open: true,
     amount: 0,
@@ -84,6 +85,7 @@ class SimpleModal extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const web3 = this.context.web3;
 
     return (
       <div>
@@ -107,6 +109,7 @@ class SimpleModal extends React.Component {
                 <Paper className={classes.innerPaper}>
                   <Grid container wrap="nowrap" spacing={16}>
                     <Grid item xs>
+                      <Typography>{web3.accounts[0]}</Typography>
                       <FormControl fullWidth className={classes.margin}>
 
                         <InputLabel htmlFor="adornment-amount">Amount</InputLabel>
@@ -155,6 +158,10 @@ class SimpleModal extends React.Component {
 
 SimpleModal.propTypes = {
   classes: PropTypes.object.isRequired,
+};
+
+SimpleModal.contextTypes = {
+  web3: PropTypes.object
 };
 
 // We need an intermediary variable for handling the recursive nesting.
