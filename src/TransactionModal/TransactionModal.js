@@ -61,28 +61,9 @@ const styles = theme => ({
   },
 });
 
-const currencies = [
-  {
-    value: 'USD',
-    label: '$',
-  },
-  {
-    value: 'EUR',
-    label: '€',
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-  },
-];
-
 class SimpleModal extends React.Component {
   state = {
-    open: false,
+    open: true,
     amount: 0,
     currency: 'EUR',
     to: '',
@@ -153,28 +134,6 @@ class SimpleModal extends React.Component {
                           margin="normal"
                           variant="outlined"
                         />
-                        <TextField
-                          id="outlined-select-currency"
-                          select
-                          label="Select"
-                          className={classes.textField}
-                          value={this.state.currency}
-                          onChange={this.handleChange('currency')}
-                          SelectProps={{
-                            MenuProps: {
-                              className: classes.menu,
-                            },
-                          }}
-                          helperText="Please select your currency"
-                          margin="normal"
-                          variant="outlined"
-                        >
-                          {currencies.map(option => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
                         <Button variant="contained" size="large" color="primary" className={classes.innerButton}>
                           Request
                         </Button>
