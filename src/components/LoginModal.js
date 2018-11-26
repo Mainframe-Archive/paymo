@@ -64,19 +64,11 @@ const styles = theme => ({
 class SimpleModal extends React.Component {
 
   state = {
-    open: false,
-    amount: 0,
-    currency: 'EUR',
-    to: '',
-    for: '',
+    open: this.props.active,
   };
 
   handleChange = prop => event => {
     this.setState({ [prop]: event.target.value });
-  };
-
-  handleOpen = () => {
-    this.setState({ open: true });
   };
 
   handleClose = () => {
@@ -85,65 +77,28 @@ class SimpleModal extends React.Component {
 
   render() {
     const { classes } = this.props;
-    // const web3 = this.context.web3;
-
     return (
       <div>
-        <Button onClick={this.handleOpen} variant="contained" size="large" className={classes.button}>
-          New
-        </Button>
-
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          open={this.state.open}
+          open={this.props.active}
           onClose={this.handleClose}
         >
           <div className={classes.paper}>
-            <IconButton onClick={this.handleClose} color="primary" className={classes.modalButton} aria-label="Add to shopping cart">
-              <CloseIcon fontSize="large" />
-            </IconButton>
-
             <div className={classes.root}>
               <div className={classes.wrapper}>
                 <Paper className={classes.innerPaper}>
                   <Grid container wrap="nowrap" spacing={16}>
                     <Grid item xs>
-                      {/*<Typography>{web3.accounts[0]}</Typography>*/}
-                      <FormControl fullWidth className={classes.margin}>
-
-                        <InputLabel htmlFor="adornment-amount">Amount</InputLabel>
-                        <Input
-                          id="adornment-amount"
-                          value={this.state.amount}
-                          onChange={this.handleChange('amount')}
-                          startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                        />
-                        <TextField
-                          id="outlined-to"
-                          label="To"
-                          className={classes.textField}
-                          value={this.state.name}
-                          onChange={this.handleChange('to')}
-                          margin="normal"
-                          variant="outlined"
-                        />
-                        <TextField
-                          id="outlined-for"
-                          label="For"
-                          className={classes.textField}
-                          value={this.state.for}
-                          onChange={this.handleChange('for')}
-                          margin="normal"
-                          variant="outlined"
-                        />
-                        <Button variant="contained" size="large" color="primary" className={classes.innerButton}>
-                          Request
-                        </Button>
-                        <Button variant="contained" size="large" color="primary" className={classes.innerButton}>
-                          Pay
-                        </Button>
-                      </FormControl>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        No ETH Account Available
+                      </Typography>
+                      <Typography component="p">
+                        It seems that you don&apos;t have an ETH account selected. If using
+                        MetaMask, please make sure that your wallet is unlocked and that
+                        you have at least one account in your accounts list.
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Paper>
@@ -158,10 +113,7 @@ class SimpleModal extends React.Component {
 
 SimpleModal.propTypes = {
   classes: PropTypes.object.isRequired,
-};
-
-SimpleModal.contextTypes = {
-  web3: PropTypes.object
+  active: PropTypes.bool.isRequired,
 };
 
 // We need an intermediary variable for handling the recursive nesting.
