@@ -65,7 +65,7 @@ class SimpleModal extends React.Component {
 
   state = {
     open: false,
-    amount: 0,
+    amount: '',
     currency: 'EUR',
     to: '',
     for: '',
@@ -83,9 +83,13 @@ class SimpleModal extends React.Component {
     this.setState({ open: false });
   };
 
+
+  handlePay = () => {
+    this.setState({ open: false });
+    // this.handleMobileMenuClose();
+  };
   render() {
     const { classes } = this.props;
-    // const web3 = this.context.web3;
 
     return (
       <div>
@@ -117,7 +121,9 @@ class SimpleModal extends React.Component {
                           id="adornment-amount"
                           value={this.state.amount}
                           onChange={this.handleChange('amount')}
-                          startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                          startAdornment={<InputAdornment position="start">ETH</InputAdornment>}
+                          placeholder={'0'}
+                          required={true}
                         />
                         <TextField
                           id="outlined-to"
@@ -137,10 +143,10 @@ class SimpleModal extends React.Component {
                           margin="normal"
                           variant="outlined"
                         />
-                        <Button variant="contained" size="large" color="primary" className={classes.innerButton}>
-                          Request
-                        </Button>
-                        <Button variant="contained" size="large" color="primary" className={classes.innerButton}>
+                        {/*<Button variant="contained" size="large" color="primary" className={classes.innerButton}>*/}
+                          {/*Request*/}
+                        {/*</Button>*/}
+                        <Button variant="contained" size="large" color="primary" className={classes.innerButton} onClick={this.handlePay}>
                           Pay
                         </Button>
                       </FormControl>
@@ -160,9 +166,6 @@ SimpleModal.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-SimpleModal.contextTypes = {
-  web3: PropTypes.object
-};
 
 // We need an intermediary variable for handling the recursive nesting.
 const TransactionModal = withStyles(styles)(SimpleModal);
