@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,7 +12,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
+import base from '../base';
+import getWeb3 from "../components/util/getWeb3";
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   root: {
@@ -64,11 +65,35 @@ const styles = theme => ({
 class SimpleModal extends React.Component {
 
   state = {
+    web3: this.props.web3,
     open: false,
     amount: '',
-    currency: 'EUR',
     to: '',
     for: '',
+    accounts:[],
+    network: '',
+  };
+
+
+  componentDidMount = async () => {
+    try {
+      // Get network provider and web3 instance.
+      const web3 = await getWeb3();
+
+      // Use web3 to get the user's accounts.
+      const accounts = await web3.eth.getAccounts();
+
+      const network = await web3.eth.net.getNetworkType();
+
+      // Set web3 and accounts to the state
+      this.setState({ web3, accounts, network });
+    } catch (error) {
+      // Catch any errors for any of the above operations.
+      alert(
+        `Failed to load web3 or accounts. Check that metamask is unlocked or console for details.`
+      );
+      console.log(error);
+    }
   };
 
   handleChange = prop => event => {
@@ -83,14 +108,19 @@ class SimpleModal extends React.Component {
     this.setState({ open: false });
   };
 
-
   handlePay = () => {
-    this.setState({ open: false });
-    // this.handleMobileMenuClose();
+    console.log(this.state);
+    base.post(`account_transactions/${this.state.accounts[0]}/${this.state.network}`, {
+      data: {to: this.state.to, for: this.state.for, amount: this.state.amount }
+    }).then(() => {
+      this.setState({ open: false });
+    }).catch(err => {
+      // handle error
+    });
   };
+
   render() {
     const { classes } = this.props;
-
     return (
       <div>
         <Button onClick={this.handleOpen} variant="contained" size="large" className={classes.button}>
@@ -113,9 +143,9 @@ class SimpleModal extends React.Component {
                 <Paper className={classes.innerPaper}>
                   <Grid container wrap="nowrap" spacing={16}>
                     <Grid item xs>
-                      {/*<Typography>{web3.accounts[0]}</Typography>*/}
-                      <FormControl fullWidth className={classes.margin}>
+                      <Typography>{this.state.accounts[0]}</Typography>
 
+                      <FormControl fullWidth className={classes.margin}>
                         <InputLabel htmlFor="adornment-amount">Amount</InputLabel>
                         <Input
                           id="adornment-amount"
@@ -171,3 +201,5 @@ SimpleModal.propTypes = {
 const TransactionModal = withStyles(styles)(SimpleModal);
 
 export default TransactionModal;
+
+

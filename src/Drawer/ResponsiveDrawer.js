@@ -8,7 +8,6 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
-// import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -18,7 +17,6 @@ import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import Transactions from '../Transactions/Transactions';
-import Button from '@material-ui/core/Button';
 import TransactionModal from '../TransactionModal/TransactionModal';
 
 
@@ -81,6 +79,7 @@ const styles = theme => ({
 class ResponsiveDrawer extends React.Component {
   state = {
     mobileOpen: false,
+    web3: this.props.web3,
   };
 
   handleDrawerToggle = () => {
@@ -113,7 +112,7 @@ class ResponsiveDrawer extends React.Component {
               </ListItem>
             </List>
             <div className={classes.horizontalCenter}>
-              <TransactionModal />
+              <TransactionModal web3={this.state.web3}/>
             </div>
           </div>
         </div>
@@ -169,7 +168,7 @@ class ResponsiveDrawer extends React.Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Transactions></Transactions>
+          <Transactions web3={this.state.web3}/>
         </main>
       </div>
     );

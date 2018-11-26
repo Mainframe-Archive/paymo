@@ -68,6 +68,7 @@ function initials(name){
 
 function SimpleTable(props) {
   const { classes } = props;
+  const web3 = props.web3;
 
   return (
     <Paper className={classes.root}>

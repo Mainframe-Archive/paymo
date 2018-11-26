@@ -34,17 +34,8 @@ class App extends Component {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
 
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
-
-      // Get the contract instance.
-      // const Contract = truffleContract(SimpleStorageContract);
-      // Contract.setProvider(web3.currentProvider);
-      // const instance = await Contract.deployed();
-
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.setState({ web3, accounts });
+      // Set web3 to the state
+      this.setState({ web3 });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -59,7 +50,7 @@ class App extends Component {
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <LoginModal active={this.state.web3 == null} />
-        <ResponsiveDrawer></ResponsiveDrawer>
+        <ResponsiveDrawer web3={this.state.web3}/>
       </MuiThemeProvider>
     );
   }
