@@ -7,6 +7,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import base from '../base';
+import getWeb3 from "./util/getWeb3";
 
 const styles = theme => ({
   root: {
@@ -65,7 +67,43 @@ function initials(name){
   initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
   return initials;
 }
+
 class SimpleTable extends React.Component {
+
+  state = {
+    rows: []
+  }
+
+  componentDidMount = async () => {
+    try {
+      // Get network provider and web3 instance.
+      const web3 = await getWeb3();
+
+      // Use web3 to get the user's accounts.
+      const accounts = await web3.eth.getAccounts();
+
+      const network = await web3.eth.net.getNetworkType();
+
+      // Set web3 and accounts to the state
+      this.setState({ web3, accounts, network });
+      console.log(`account_transactions/${accounts[0]}/${network}`);
+      base.listenTo(`account_transactions/${accounts[0]}/${network}`, {
+        context: this,
+        asArray: true,
+        then(transactionData) {
+          let rows = []
+          transactionData.forEach((transaction, index) => {
+            console.log(index, transaction);
+            rows.push(createData(transaction.to, danAvatar, transaction.for, "Aug 12", transaction.amount))
+          });
+          this.setState({rows});
+        }
+      });
+    } catch (error) {
+      // Catch any errors for any of the above operations.
+      console.log(error);
+    }
+  };
 
 
   render() {
@@ -75,7 +113,7 @@ class SimpleTable extends React.Component {
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableBody>
-            {rows.map(row => {
+            {this.state.rows.map(row => {
               return (
                 <TableRow key={row.id}>
                   <TableCell>

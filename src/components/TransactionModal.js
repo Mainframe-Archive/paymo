@@ -14,7 +14,7 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 // import base from '../base';
 import getWeb3 from "./util/getWeb3";
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   root: {
@@ -125,8 +125,7 @@ class SimpleModal extends React.Component {
                 <Paper className={classes.innerPaper}>
                   <Grid container wrap="nowrap" spacing={16}>
                     <Grid item xs>
-                      <Typography>{this.state.accounts[0]}</Typography>
-
+                      {/*<Typography>{this.state.accounts[0]}</Typography>*/}
                       <FormControl fullWidth className={classes.margin}>
                         <InputLabel htmlFor="adornment-amount">Amount</InputLabel>
                         <Input

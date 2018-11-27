@@ -2,7 +2,6 @@ import Rebase from 're-base';
 import firebase from 'firebase/app';
 import 'firebase/database';
 import config from './firebaseConfig'
-import fb from 'firebase/app';
 
 const app = firebase.initializeApp({
   apiKey: config.apiKey,
