@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import ResponsiveDrawer from "./Drawer/ResponsiveDrawer";
+import ResponsiveDrawer from "./components/ResponsiveDrawer";
 import LoginModal from './components/LoginModal';
 import getWeb3 from './components/util/getWeb3';
 const theme = createMuiTheme({

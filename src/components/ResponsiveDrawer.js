@@ -16,8 +16,10 @@ import AccessTime from '@material-ui/icons/AccessTime';
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
-import Transactions from '../Transactions/Transactions';
-import TransactionModal from '../TransactionModal/TransactionModal';
+import Transactions from './Transactions';
+import TransactionModal from './TransactionModal';
+import base from '../base';
+import Button from "@material-ui/core/Button/Button";
 
 
 // TODO: Next steps are to create the "New" transaction overlay. It's the dialog for creating a new transaction.
@@ -39,6 +41,10 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
+  },
+  button: {
+    backgroundColor: theme.palette.complementary.main,
+    color: theme.palette.complementary.contrastText,
   },
   menuButton: {
     marginRight: 20,
@@ -77,17 +83,110 @@ const styles = theme => ({
 
 
 class ResponsiveDrawer extends React.Component {
+
   state = {
     mobileOpen: false,
     web3: this.props.web3,
+    transactionModalOpen: false,
   };
 
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
+  handleOpenTrandactionModal = () => {
+    this.setState({ transactionModalOpen: true });
+  };
+
+  sendTransaction = (recipient, note, amount) => {
+    console.log('this.state: ', this.state);
+    if (this.state.network !== 'ropsten' ) { return; }
+    if (!this.props.web3.utils.isAddress(recipient)) {
+      alert(`Recipient was not a valid Ethereum address. Please try creating your transaction again.`);
+      return;
+    }
+
+    this.setState({recipient: recipient, note: note, transactionAmount: amount});
+
+    const weiAmount = this.props.web3.utils.toWei(amount);
+
+    this.props.web3.eth.sendTransaction({
+      from: `${this.state.accounts[0]}`,
+      to: `${recipient}`,
+      value: weiAmount
+    })
+      .once('transactionHash', this.printTransactionHash)
+      .once('receipt', this.printReceipt)
+      .on('confirmation', this.printConfNumber)
+      .on('error', this.logError)
+      .then(this.receiptWasMined);
+  }
+
+  printTransactionHash = (transactionHash) => {
+    console.log('transactionHash: ', transactionHash);
+    this.setState({ transactionHash, transactionModalOpen: false });
+  }
+
+  printReceipt(receipt) {
+    console.log('receipt: ', receipt);
+  }
+
+  printConfNumber(confNumber, receipt){
+    console.log('confNumber: ', confNumber, receipt);
+  }
+
+  logError(error){
+    console.error('ERROR: ', error);
+  }
+
+  receiptWasMined = (receipt) => {
+    console.log('The receipt has been mined! ', receipt);
+    // will be fired once the receipt is mined
+
+    base.post(`account_transactions/${this.state.accounts[0]}/${this.state.network}/${this.state.transactionHash}`, {
+      data: {to: this.state.recipient, for: this.state.note, amount: this.state.transactionAmount, receipt: receipt }
+    }).then(() => {
+      console.log('🎉 saved to firebase!');
+    }).catch(err => {
+      // handle error
+      console.error('ERROR: ', err);
+    });
+  }
+
+  getBlockchainData = async () => {
+    try {
+      // Use web3 to get the user's accounts.
+      const accounts = await this.props.web3.eth.getAccounts();
+      const network = await this.props.web3.eth.net.getNetworkType();
+
+      // Set web3 and accounts to the state
+      if (!this.state.accounts || !this.state.network || this.state.accounts[0] !== accounts[0] || this.state.network !== network) {
+        console.log('🔴');
+        this.setState({ accounts, network } );
+        this.props.web3.eth.getTransactionCount(`${this.state.accounts[0]}`)
+          .then(console.log);
+      }
+    } catch (error) {
+      // Catch any errors for any of the above operations.
+      alert(
+        `Failed to load web3 or accounts. Check that metamask is unlocked or console for details.`
+      );
+      console.log(error);
+    }
+  };
+
   render() {
-    const { classes, theme } = this.props;
+    // this.sendTransaction("asd");
+    const { classes, theme, web3 } = this.props;
+
+    if (web3) {
+      this.getBlockchainData();
+      console.log('🔵');
+      console.log(this.state.accounts);
+      console.log(this.state.network);
+
+      console.log('🔵');
+    }
 
     const drawer = (
       <div>
@@ -112,7 +211,14 @@ class ResponsiveDrawer extends React.Component {
               </ListItem>
             </List>
             <div className={classes.horizontalCenter}>
-              <TransactionModal web3={this.state.web3}/>
+              <Button onClick={this.handleOpenTrandactionModal} variant="contained" size="large" className={classes.button}>
+                New
+              </Button>
+              <TransactionModal
+                web3={this.state.web3}
+                transactionModalOpen={this.state.transactionModalOpen}
+                handleTransactionSend={this.sendTransaction}
+              />
             </div>
           </div>
         </div>

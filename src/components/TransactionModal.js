@@ -12,8 +12,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
-import base from '../base';
-import getWeb3 from "../components/util/getWeb3";
+// import base from '../base';
+import getWeb3 from "./util/getWeb3";
 import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
@@ -41,7 +41,6 @@ const styles = theme => ({
   button: {
     backgroundColor: theme.palette.complementary.main,
     color: theme.palette.complementary.contrastText,
-
   },
   modalButton: {
     margin: theme.spacing.unit,
@@ -66,7 +65,7 @@ class SimpleModal extends React.Component {
 
   state = {
     web3: this.props.web3,
-    open: false,
+    open: this.props.transactionModalOpen,
     amount: '',
     to: '',
     for: '',
@@ -110,27 +109,18 @@ class SimpleModal extends React.Component {
 
   handlePay = () => {
     console.log(this.state);
-    base.post(`account_transactions/${this.state.accounts[0]}/${this.state.network}`, {
-      data: {to: this.state.to, for: this.state.for, amount: this.state.amount }
-    }).then(() => {
-      this.setState({ open: false });
-    }).catch(err => {
-      // handle error
-    });
+    this.props.handleTransactionSend(this.state.to, this.state.for, this.state.amount);
   };
 
   render() {
     const { classes } = this.props;
+
     return (
       <div>
-        <Button onClick={this.handleOpen} variant="contained" size="large" className={classes.button}>
-          New
-        </Button>
-
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          open={this.state.open}
+          open={this.props.transactionModalOpen}
           onClose={this.handleClose}
         >
           <div className={classes.paper}>
