@@ -65,32 +65,38 @@ function initials(name){
   initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
   return initials;
 }
+class SimpleTable extends React.Component {
 
-function SimpleTable(props) {
-  const { classes } = props;
 
-  return (
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableBody>
-          {rows.map(row => {
-            return (
-              <TableRow key={row.id}>
-                <TableCell>
-                  <Avatar alt={row.name} src={row.avatarURL} >{initials(row.name)}</Avatar>
-                </TableCell>
-                <NameTableCell>{row.name}</NameTableCell>
-                <CustomTableCell>{row.description}</CustomTableCell>
-                <CustomTableCell>{row.date}</CustomTableCell>
-                <CustomTableCell numeric>{row.amount}</CustomTableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </Paper>
-  );
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <Paper className={classes.root}>
+        <Table className={classes.table}>
+          <TableBody>
+            {rows.map(row => {
+              return (
+                <TableRow key={row.id}>
+                  <TableCell>
+                    <Avatar alt={row.name} src={row.avatarURL} >{initials(row.name)}</Avatar>
+                  </TableCell>
+                  <NameTableCell>{row.name}</NameTableCell>
+                  <CustomTableCell>{row.description}</CustomTableCell>
+                  <CustomTableCell>{row.date}</CustomTableCell>
+                  <CustomTableCell numeric>{row.amount}</CustomTableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
+    );
+  }
 }
+
+
+
 
 SimpleTable.propTypes = {
   classes: PropTypes.object.isRequired,

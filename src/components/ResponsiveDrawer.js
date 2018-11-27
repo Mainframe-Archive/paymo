@@ -98,6 +98,10 @@ class ResponsiveDrawer extends React.Component {
     this.setState({ transactionModalOpen: true });
   };
 
+  handleCloseTrandactionModal = () => {
+    this.setState({ transactionModalOpen: false });
+  };
+
   sendTransaction = (recipient, note, amount) => {
     console.log('this.state: ', this.state);
     if (this.state.network !== 'ropsten' ) { return; }
@@ -161,10 +165,7 @@ class ResponsiveDrawer extends React.Component {
 
       // Set web3 and accounts to the state
       if (!this.state.accounts || !this.state.network || this.state.accounts[0] !== accounts[0] || this.state.network !== network) {
-        console.log('🔴');
         this.setState({ accounts, network } );
-        this.props.web3.eth.getTransactionCount(`${this.state.accounts[0]}`)
-          .then(console.log);
       }
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -181,11 +182,6 @@ class ResponsiveDrawer extends React.Component {
 
     if (web3) {
       this.getBlockchainData();
-      console.log('🔵');
-      console.log(this.state.accounts);
-      console.log(this.state.network);
-
-      console.log('🔵');
     }
 
     const drawer = (
@@ -217,6 +213,7 @@ class ResponsiveDrawer extends React.Component {
               <TransactionModal
                 web3={this.state.web3}
                 transactionModalOpen={this.state.transactionModalOpen}
+                handleTransactionModalClose={this.handleCloseTrandactionModal}
                 handleTransactionSend={this.sendTransaction}
               />
             </div>

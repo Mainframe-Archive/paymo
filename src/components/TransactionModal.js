@@ -88,9 +88,6 @@ class SimpleModal extends React.Component {
       this.setState({ web3, accounts, network });
     } catch (error) {
       // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3 or accounts. Check that metamask is unlocked or console for details.`
-      );
       console.log(error);
     }
   };
@@ -99,16 +96,11 @@ class SimpleModal extends React.Component {
     this.setState({ [prop]: event.target.value });
   };
 
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
-
   handleClose = () => {
-    this.setState({ open: false });
+    this.props.handleTransactionModalClose();
   };
 
   handlePay = () => {
-    console.log(this.state);
     this.props.handleTransactionSend(this.state.to, this.state.for, this.state.amount);
   };
 
