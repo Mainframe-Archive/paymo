@@ -13,9 +13,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AccessTime from '@material-ui/icons/AccessTime';
-import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import Transactions from './Transactions';
 import TransactionModal from './TransactionModal';
 import base from '../base';
@@ -104,7 +102,12 @@ class ResponsiveDrawer extends React.Component {
 
   sendTransaction = (recipient, comment, amount) => {
     console.log('this.state: ', this.state);
-    if (this.state.network !== 'ropsten' ) { return; }
+    if (this.state.network !== 'ropsten' ) {
+      alert(
+        `Please connect to ropsten testnet to use this dApp.`
+      );
+      return;
+    }
     if (!this.props.web3.utils.isAddress(recipient)) {
       alert(`Recipient was not a valid Ethereum address. Please try creating your transaction again.`);
       return;
@@ -180,7 +183,6 @@ class ResponsiveDrawer extends React.Component {
   };
 
   render() {
-    // this.sendTransaction("asd");
     const { classes, theme, web3 } = this.props;
 
     if (web3) {
@@ -196,17 +198,9 @@ class ResponsiveDrawer extends React.Component {
                 <ListItemIcon><AccessTime /></ListItemIcon>
                 <ListItemText>Activity</ListItemText>
               </ListItem>
-              <ListItem button key="Cash Card">
-                <ListItemIcon><MonetizationOn /></ListItemIcon>
-                <ListItemText>Cash Card</ListItemText>
-              </ListItem>
               <ListItem button key="Settings">
                 <ListItemIcon><AccountCircle /></ListItemIcon>
                 <ListItemText>Settings</ListItemText>
-              </ListItem>
-              <ListItem button key="Sign Out">
-                <ListItemIcon><RemoveCircleOutline /></ListItemIcon>
-                <ListItemText>Sign Out</ListItemText>
               </ListItem>
             </List>
             <div className={classes.horizontalCenter}>

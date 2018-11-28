@@ -45,10 +45,10 @@ const NameTableCell = withStyles(theme => ({
 }))(TableCell);
 
 
-let id = 0;
-function createData(name, avatarURL, description, date, amount) {
-  id += 1;
-  return { id, name, avatarURL, description, date, amount };
+let rowId = 0;
+function createData(identifier, avatar, comment, date, value) {
+  rowId += 1;
+  return { rowId, identifier, avatar, comment, date, value };
 }
 
 const danAvatar = 'https://images-production-f.squarecdn.com/unsafe/72x0/https://franklin-assets.s3.amazonaws.com/apps/imgs/cpxmXqyosrjLWFdWz32SmH.jpeg';
@@ -68,6 +68,11 @@ function initials(name){
   let initials = name.match(/\b\w/g) || [];
   initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
   return initials;
+}
+
+function condenseAddress(address){
+  const len = 4;
+  return address.slice(0, len + 2) + '...' + address.slice(-len, address.length)
 }
 
 class SimpleTable extends React.Component {
@@ -96,7 +101,8 @@ class SimpleTable extends React.Component {
           let rows = []
           transactionData.forEach((transaction, index) => {
             console.log(index, transaction);
-            rows.push(createData(transaction.receipt.to, danAvatar, transaction.receipt.for, this.formatedDate(transaction.timestamp * 1000), transaction.amount))
+            const ethAmount =   web3.utils.fromWei(transaction.value);
+            rows.push(createData(transaction.receipt.to, '', transaction.comment, this.formatedDate(transaction.timestamp * 1000), ethAmount))
           });
           this.setState({rows});
         }
@@ -111,8 +117,7 @@ class SimpleTable extends React.Component {
     const today = new Date(timestamp).toLocaleDateString(undefined, {
       day : 'numeric',
       month : 'short',
-      // year : 'numeric'
-    })
+    });
     return today;
   }
 
@@ -125,15 +130,15 @@ class SimpleTable extends React.Component {
           <TableBody>
             {this.state.rows.map(row => {
               return (
-                <TableRow key={row.id}>
+                <TableRow key={row.rowId}>
                   <TableCell>
                     {/*<Avatar alt={row.name} src={row.avatarURL} >{initials(row.name)}</Avatar>*/}
-                    <Jazzicon diameter={50} seed={jsNumberForAddress(row.name)} />
+                    <Jazzicon diameter={50} seed={jsNumberForAddress(row.identifier)} />
                   </TableCell>
-                  <NameTableCell>{row.name}</NameTableCell>
-                  <CustomTableCell>{row.description}</CustomTableCell>
+                  <CustomTableCell>{condenseAddress(row.identifier)}</CustomTableCell>
+                  <NameTableCell>{row.comment}</NameTableCell>
                   <CustomTableCell>{row.date}</CustomTableCell>
-                  <CustomTableCell numeric>{row.amount} Eth</CustomTableCell>
+                  <CustomTableCell numeric>{row.value} Eth</CustomTableCell>
                 </TableRow>
               );
             })}

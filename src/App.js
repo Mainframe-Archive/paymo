@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
 import LoginModal from './components/LoginModal';
 import getWeb3 from './components/util/getWeb3';
+
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -39,7 +40,7 @@ class App extends Component {
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3 or accounts. Check that metamask is unlocked or console for details.`
+        `Failed to load web3 or accounts. Check that metamask is unlocked and that paymo is approved, or alternatively take a look at the console for details.`
       );
       console.log(error);
     }
