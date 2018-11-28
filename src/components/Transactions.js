@@ -9,6 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import base from '../base';
 import getWeb3 from "./util/getWeb3";
+import Jazzicon from './util/JazzIcon/Jazzicon';
+import jsNumberForAddress from './util/JazzIcon/jsNumberForAddress';
 
 const styles = theme => ({
   root: {
@@ -94,7 +96,7 @@ class SimpleTable extends React.Component {
           let rows = []
           transactionData.forEach((transaction, index) => {
             console.log(index, transaction);
-            rows.push(createData(transaction.to, danAvatar, transaction.for, "Aug 12", transaction.amount))
+            rows.push(createData(transaction.receipt.to, danAvatar, transaction.receipt.for, this.formatedDate(transaction.timestamp * 1000), transaction.amount))
           });
           this.setState({rows});
         }
@@ -105,6 +107,14 @@ class SimpleTable extends React.Component {
     }
   };
 
+  formatedDate(timestamp) {
+    const today = new Date(timestamp).toLocaleDateString(undefined, {
+      day : 'numeric',
+      month : 'short',
+      // year : 'numeric'
+    })
+    return today;
+  }
 
   render() {
     const { classes } = this.props;
@@ -117,12 +127,13 @@ class SimpleTable extends React.Component {
               return (
                 <TableRow key={row.id}>
                   <TableCell>
-                    <Avatar alt={row.name} src={row.avatarURL} >{initials(row.name)}</Avatar>
+                    {/*<Avatar alt={row.name} src={row.avatarURL} >{initials(row.name)}</Avatar>*/}
+                    <Jazzicon diameter={50} seed={jsNumberForAddress(row.name)} />
                   </TableCell>
                   <NameTableCell>{row.name}</NameTableCell>
                   <CustomTableCell>{row.description}</CustomTableCell>
                   <CustomTableCell>{row.date}</CustomTableCell>
-                  <CustomTableCell numeric>{row.amount}</CustomTableCell>
+                  <CustomTableCell numeric>{row.amount} Eth</CustomTableCell>
                 </TableRow>
               );
             })}

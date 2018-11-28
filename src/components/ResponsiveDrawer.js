@@ -102,7 +102,7 @@ class ResponsiveDrawer extends React.Component {
     this.setState({ transactionModalOpen: false });
   };
 
-  sendTransaction = (recipient, note, amount) => {
+  sendTransaction = (recipient, comment, amount) => {
     console.log('this.state: ', this.state);
     if (this.state.network !== 'ropsten' ) { return; }
     if (!this.props.web3.utils.isAddress(recipient)) {
@@ -110,9 +110,8 @@ class ResponsiveDrawer extends React.Component {
       return;
     }
 
-    this.setState({recipient: recipient, note: note, transactionAmount: amount});
-
     const weiAmount = this.props.web3.utils.toWei(amount);
+    this.setState({recipient: recipient, comment: comment, transactionAmount: amount, weiAmount});
 
     this.props.web3.eth.sendTransaction({
       from: `${this.state.accounts[0]}`,
@@ -124,12 +123,12 @@ class ResponsiveDrawer extends React.Component {
       .on('confirmation', this.printConfNumber)
       .on('error', this.logError)
       .then(this.receiptWasMined);
-  }
+  };
 
   printTransactionHash = (transactionHash) => {
     console.log('transactionHash: ', transactionHash);
     this.setState({ transactionHash, transactionModalOpen: false });
-  }
+  };
 
   printReceipt(receipt) {
     console.log('receipt: ', receipt);
@@ -147,15 +146,19 @@ class ResponsiveDrawer extends React.Component {
     console.log('The receipt has been mined! ', receipt);
     // will be fired once the receipt is mined
 
-    base.post(`account_transactions/${this.state.accounts[0]}/${this.state.network}/${this.state.transactionHash}`, {
-      data: {to: this.state.recipient, for: this.state.note, amount: this.state.transactionAmount, receipt: receipt }
-    }).then(() => {
-      console.log('🎉 saved to firebase!');
-    }).catch(err => {
-      // handle error
-      console.error('ERROR: ', err);
+    this.props.web3.eth.getBlock(receipt.blockNumber).then((block) => {
+      base.post(`account_transactions/${this.state.accounts[0]}/${this.state.network}/${this.state.transactionHash}`, {
+        data: {
+          comment: this.state.comment,
+          value: this.state.weiAmount,
+          timestamp: block.timestamp,
+          receipt
+        }
+      }).catch(err => {
+        console.error('ERROR: ', err);
+      })
     });
-  }
+  };
 
   getBlockchainData = async () => {
     try {

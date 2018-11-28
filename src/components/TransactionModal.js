@@ -12,9 +12,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
-// import base from '../base';
 import getWeb3 from "./util/getWeb3";
-// import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   root: {
