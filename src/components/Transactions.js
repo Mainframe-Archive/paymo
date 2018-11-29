@@ -20,6 +20,14 @@ const styles = theme => ({
   row: {
     display: 'flex',
   },
+  fade: {
+    color: '#999',
+  },
+  noWrap: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    color: '#999'
+  },
 });
 
 const CustomTableCell = withStyles(theme => ({
@@ -29,19 +37,8 @@ const CustomTableCell = withStyles(theme => ({
   },
   body: {
     fontSize: 14,
-    color: '#999',
     height: 75,
-  },
-}))(TableCell);
-
-const NameTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
+  }
 }))(TableCell);
 
 
@@ -135,10 +132,10 @@ class SimpleTable extends React.Component {
                     {/*<Avatar alt={row.name} src={row.avatarURL} >{initials(row.name)}</Avatar>*/}
                     <Jazzicon diameter={50} seed={jsNumberForAddress(row.identifier)} />
                   </TableCell>
-                  <CustomTableCell>{condenseAddress(row.identifier)}</CustomTableCell>
-                  <NameTableCell>{row.comment}</NameTableCell>
-                  <CustomTableCell>{row.date}</CustomTableCell>
-                  <CustomTableCell numeric>{row.value} Eth</CustomTableCell>
+                  <CustomTableCell className={classes.fade}>{condenseAddress(row.identifier)}</CustomTableCell>
+                  <CustomTableCell>{row.comment}</CustomTableCell>
+                  <CustomTableCell className={classes.noWrap}>{row.date}</CustomTableCell>
+                  <CustomTableCell className={classes.noWrap} numeric>{row.value} Eth</CustomTableCell>
                 </TableRow>
               );
             })}
