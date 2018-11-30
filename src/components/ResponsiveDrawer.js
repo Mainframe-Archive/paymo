@@ -19,11 +19,7 @@ import TransactionModal from './TransactionModal';
 import base from '../base';
 import Button from "@material-ui/core/Button/Button";
 
-
-// TODO: Next steps are to create the "New" transaction overlay. It's the dialog for creating a new transaction.
-
 const drawerWidth = 240;
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -78,7 +74,6 @@ const styles = theme => ({
     width: '50%',
   },
 });
-
 
 class ResponsiveDrawer extends React.Component {
 
