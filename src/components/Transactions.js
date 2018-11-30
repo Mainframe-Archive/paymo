@@ -1,4 +1,4 @@
-import Avatar from '@material-ui/core/Avatar';
+// import Avatar from '@material-ui/core/Avatar';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -18,29 +18,17 @@ const styles = theme => ({
     overflowX: 'auto',
   },
   row: {
-    display: 'flex',
+    fontSize: 14,
+    height: 75,
   },
-  fade: {
+  fader: {
     color: '#999',
   },
   noWrap: {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    color: '#999'
   },
 });
-
-const CustomTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-    height: 75,
-  }
-}))(TableCell);
-
 
 let rowId = 0;
 function createData(identifier, avatar, comment, date, value) {
@@ -61,13 +49,13 @@ const rows = [
   createData('Chandler Hobard', '', 'Expired', 'Aug 18, 2017', '$20' ),
 ];
 
-function initials(name){
+function initials(name) {
   let initials = name.match(/\b\w/g) || [];
   initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
   return initials;
 }
 
-function condenseAddress(address){
+function condenseAddress(address) {
   const len = 4;
   return address.slice(0, len + 2) + '...' + address.slice(-len, address.length)
 }
@@ -76,7 +64,7 @@ class SimpleTable extends React.Component {
 
   state = {
     rows: []
-  }
+  };
 
   componentDidMount = async () => {
     try {
@@ -90,14 +78,12 @@ class SimpleTable extends React.Component {
 
       // Set web3 and accounts to the state
       this.setState({ web3, accounts, network });
-      console.log(`account_transactions/${accounts[0]}/${network}`);
       base.listenTo(`account_transactions/${accounts[0]}/${network}`, {
         context: this,
         asArray: true,
         then(transactionData) {
           let rows = []
           transactionData.forEach((transaction, index) => {
-            console.log(index, transaction);
             const ethAmount =   web3.utils.fromWei(transaction.value);
             rows.push(createData(transaction.receipt.to, '', transaction.comment, this.formatedDate(transaction.timestamp * 1000), ethAmount))
           });
@@ -106,7 +92,7 @@ class SimpleTable extends React.Component {
       });
     } catch (error) {
       // Catch any errors for any of the above operations.
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -127,15 +113,15 @@ class SimpleTable extends React.Component {
           <TableBody>
             {this.state.rows.map(row => {
               return (
-                <TableRow key={row.rowId}>
+                <TableRow key={row.rowId} className={classes.row}>
                   <TableCell>
                     {/*<Avatar alt={row.name} src={row.avatarURL} >{initials(row.name)}</Avatar>*/}
                     <Jazzicon diameter={50} seed={jsNumberForAddress(row.identifier)} />
                   </TableCell>
-                  <CustomTableCell className={classes.fade}>{condenseAddress(row.identifier)}</CustomTableCell>
-                  <CustomTableCell>{row.comment}</CustomTableCell>
-                  <CustomTableCell className={classes.noWrap}>{row.date}</CustomTableCell>
-                  <CustomTableCell className={classes.noWrap} numeric>{row.value} Eth</CustomTableCell>
+                  <TableCell className={classes.fade}>{condenseAddress(row.identifier)}</TableCell>
+                  <TableCell>{row.comment}</TableCell>
+                  <TableCell className={`${classes.noWrap} ${classes.fader}`}>{row.date}</TableCell>
+                  <TableCell className={`${classes.noWrap} ${classes.fader}`} numeric >{row.value} Eth</TableCell>
                 </TableRow>
               );
             })}
@@ -145,9 +131,6 @@ class SimpleTable extends React.Component {
     );
   }
 }
-
-
-
 
 SimpleTable.propTypes = {
   classes: PropTypes.object.isRequired,
