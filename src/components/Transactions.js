@@ -11,6 +11,10 @@ import base from '../base';
 import getWeb3 from "./util/getWeb3";
 import Jazzicon from './util/JazzIcon/Jazzicon';
 import jsNumberForAddress from './util/JazzIcon/jsNumberForAddress';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+
 
 const styles = theme => ({
   root: {
@@ -28,6 +32,11 @@ const styles = theme => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
   },
+  address: {
+    textTransform: 'none',
+    fontSize: 14,
+    fontWeight: 400,
+  }
 });
 
 let rowId = 0;
@@ -118,7 +127,13 @@ class SimpleTable extends React.Component {
                     {/*<Avatar alt={row.name} src={row.avatarURL} >{initials(row.name)}</Avatar>*/}
                     <Jazzicon diameter={50} seed={jsNumberForAddress(row.identifier)} />
                   </TableCell>
-                  <TableCell className={classes.fade}>{condenseAddress(row.identifier)}</TableCell>
+                  <TableCell className={classes.fade}>
+                    <Tooltip title={row.identifier} placement="top">
+                      <CopyToClipboard className={classes.address} text={row.identifier}>
+                        <Button >{condenseAddress(row.identifier)}</Button>
+                      </CopyToClipboard>
+                    </Tooltip>
+                  </TableCell>
                   <TableCell>{row.comment}</TableCell>
                   <TableCell className={`${classes.noWrap} ${classes.fader}`}>{row.date}</TableCell>
                   <TableCell className={`${classes.noWrap} ${classes.fader}`} numeric >{row.value} Eth</TableCell>
