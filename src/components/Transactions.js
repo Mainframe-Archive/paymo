@@ -45,25 +45,6 @@ function createData(identifier, avatar, comment, date, value) {
   return { rowId, identifier, avatar, comment, date, value };
 }
 
-const danAvatar = 'https://images-production-f.squarecdn.com/unsafe/72x0/https://franklin-assets.s3.amazonaws.com/apps/imgs/cpxmXqyosrjLWFdWz32SmH.jpeg';
-const daveAvatar = 'https://images-production-f.squarecdn.com/unsafe/72x0/https://franklin-assets.s3.amazonaws.com/apps/imgs/7slho2uSf2zlr6CmHu04lH.jpeg';
-const wesAvatar = 'https://images-production-f.squarecdn.com/unsafe/72x0/https://franklin-assets.s3.amazonaws.com/apps/imgs/7slho2uSf2zlr6CmHu04lH.jpeg';
-
-const rows = [
-  createData('Daniel Jensen', danAvatar, 'For maisy’s birthday party dinner', 'Aug 28', '-$38' ),
-  createData('Robert Pratt', wesAvatar, 'For Nano Ledger S', 'Aug 28', '$100' ),
-  createData('David Jensen', daveAvatar, 'For 🍪', 'Oct 21, 2017', '-$7' ),
-  createData('David Jensen', daveAvatar, 'For pizza', 'Aug 28', '-$38' ),
-  createData('Daniel Jensen', danAvatar, 'For replacement drone blades', 'Sept 5, 2018', '$10.67' ),
-  createData('Chandler Hobard', '', 'Expired', 'Aug 18, 2017', '$20' ),
-];
-
-function initials(name) {
-  let initials = name.match(/\b\w/g) || [];
-  initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
-  return initials;
-}
-
 function condenseAddress(address) {
   const len = 4;
   return address.slice(0, len + 2) + '...' + address.slice(-len, address.length)

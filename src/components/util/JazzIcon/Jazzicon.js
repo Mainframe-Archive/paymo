@@ -13,7 +13,6 @@ const wobble = 30;
 
 export default class Jazzicon extends React.PureComponent {
   genColor = (colors) => {
-    const rand = this.generator.random();
     const idx = Math.floor(colors.length * this.generator.random());
     const color = colors.splice(idx, 1)[0];
     return color;
