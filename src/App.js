@@ -40,7 +40,7 @@ class App extends Component {
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3 or accounts. Check that metamask is unlocked and that paymo is approved, or alternatively take a look at the console for details.`
+        `Failed to load web3 or accounts. Check that metamask is unlocked and that paymo is approved, or alternatively take a look at the console for details. You might also be trying to use MainframeOS which this app is not optimized for.`
       );
       console.log(error);
     }

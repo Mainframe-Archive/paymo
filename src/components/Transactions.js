@@ -36,6 +36,7 @@ const styles = theme => ({
     textTransform: 'none',
     fontSize: 14,
     fontWeight: 400,
+    color: '#999',
   }
 });
 
