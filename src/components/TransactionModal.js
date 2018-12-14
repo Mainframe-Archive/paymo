@@ -79,7 +79,6 @@ class SimpleModal extends React.Component {
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
-
       const network = await web3.eth.net.getNetworkType();
 
       // Set web3 and accounts to the state
