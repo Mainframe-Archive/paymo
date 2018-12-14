@@ -8,12 +8,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import base from '../base';
-import getWeb3 from "./util/getWeb3";
 import Jazzicon from './util/JazzIcon/Jazzicon';
 import jsNumberForAddress from './util/JazzIcon/jsNumberForAddress';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { utils } from "web3";
+
 
 
 const styles = theme => ({
@@ -54,38 +55,35 @@ function condenseAddress(address) {
 class SimpleTable extends React.Component {
 
   state = {
-    rows: []
+    account: this.props.account,
+    network: this.props.network,
+    rows: [],
   };
 
-  componentDidMount = async () => {
-    try {
-      // Get network provider and web3 instance.
-      const web3 = await getWeb3();
-
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
-
-      const network = await web3.eth.net.getNetworkType();
-
-      // Set web3 and accounts to the state
-      this.setState({ web3, accounts, network });
-      base.listenTo(`account_transactions/${accounts[0]}/${network}`, {
-        context: this,
-        asArray: true,
-        then(transactionData) {
-          let rows = []
-          transactionData.forEach((transaction, index) => {
-            const ethAmount =   web3.utils.fromWei(transaction.value);
-            rows.push(createData(transaction.receipt.to, '', transaction.comment, this.formatedDate(transaction.timestamp * 1000), ethAmount))
-          });
-          this.setState({rows});
-        }
-      });
-    } catch (error) {
-      // Catch any errors for any of the above operations.
-      console.error(error);
+  componentDidUpdate= async (prevProps) => {
+    // Typical usage (don't forget to compare props):
+    if (this.props.account !== prevProps.account || this.props.network !== prevProps.network) {
+      try {
+        console.log(`account_transactions/${this.props.account}/${this.props.network}`);
+        base.listenTo(`account_transactions/${this.props.account}/${this.props.network}`, {
+          context: this,
+          asArray: true,
+          then(transactionData) {
+            let rows = []
+            transactionData.forEach((transaction, index) => {
+              const ethAmount = utils.fromWei(transaction.value);
+              rows.push(createData(transaction.receipt.to, '', transaction.comment, this.formatedDate(transaction.timestamp * 1000), ethAmount))
+            });
+            this.setState({rows});
+          }
+        });
+      } catch (error) {
+        // Catch any errors for any of the above operations.
+        console.error(error);
+      }
     }
-  };
+  }
+
 
   formatedDate(timestamp) {
     const today = new Date(timestamp).toLocaleDateString(undefined, {

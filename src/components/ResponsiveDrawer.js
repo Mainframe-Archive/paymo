@@ -81,6 +81,8 @@ class ResponsiveDrawer extends React.Component {
     mobileOpen: false,
     web3: this.props.web3,
     transactionModalOpen: false,
+    accounts: [],
+    network: null,
   };
 
   handleDrawerToggle = () => {
@@ -145,6 +147,7 @@ class ResponsiveDrawer extends React.Component {
     // will be fired once the receipt is mined
 
     this.props.web3.eth.getBlock(receipt.blockNumber).then((block) => {
+      console.log(`account_transactions/${this.state.accounts[0]}/${this.state.network}/${this.state.transactionHash}`);
       base.post(`account_transactions/${this.state.accounts[0]}/${this.state.network}/${this.state.transactionHash}`, {
         data: {
           comment: this.state.comment,
@@ -164,7 +167,7 @@ class ResponsiveDrawer extends React.Component {
       const accounts = await this.props.web3.eth.getAccounts();
       const network = await this.props.web3.eth.net.getNetworkType();
 
-      // Set web3 and accounts to the state
+      // Set accounts and network to the state
       if (!this.state.accounts || !this.state.network || this.state.accounts[0] !== accounts[0] || this.state.network !== network) {
         this.setState({ accounts, network } );
       }
@@ -182,6 +185,8 @@ class ResponsiveDrawer extends React.Component {
 
     if (web3) {
       this.getBlockchainData();
+    } else {
+      return null;
     }
 
     const drawer = (
@@ -263,7 +268,7 @@ class ResponsiveDrawer extends React.Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Transactions web3={this.state.web3}/>
+          <Transactions account={this.state.accounts[0]} network={this.state.network}/>
         </main>
       </div>
     );
