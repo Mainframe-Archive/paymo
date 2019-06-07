@@ -1,44 +1,34 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![CircleCI](https://circleci.com/gh/MainframeHQ/payments.svg?style=svg)](https://circleci.com/gh/MainframeHQ/payments)
+# paymo
+Paymo is a simple dApp for sending payments in MainframeOS
 
-## Available Scripts
+## Build/run instructions
 
-In the project directory, you can run:
+#### Install dependencies & build
+```
+yarn
+yarn build
+```
 
-### `npm start`
+#### Open in Mainframe OS
+- [Install Mainframe OS](docs.mainframe.com) (from binaries or by building from source)
+- In Mainframe OS, go to **More > App Development Tool**, create your Developer Identity, and click **Add** to add this app to Mainframe OS. Add the `/build` directory as the content path.
+- Click **Open** button to run the pre-built version of the app in a Mainframe OS window.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### Run/debug development version
+To run a development version of the app from localhost, in this app directory run
+```
+yarn start
+```
+Then in the app window running in Mainframe OS, click the content path field at the top of the address bar and change it to be http://localhost:3000.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+>**Note:** Apps that import the Mainframe SDK cannot be run in an external browser. If you try to open your new dapp in a standard browser (e.g. Chrome), you will get the following error: Error: Cannot find expected mainframe client instance. Dapps that integrate with the Mainframe SDK can only be opened in Mainframe OS.
 
-### `npm test`
+#### Link to development version of Mainframe SDK
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [Build Mainframe OS from source](https://docs.mainframe.com/docs/platform)
+- Inside the `mainframe-os` project, at the `/packages/sdk` directory, run `yarn link`.
+- Run the mainframe launcher program with `yarn run dev` and follow the setup instructions.
+- Inside the root of this project, run `yarn link @mainframe/sdk`.
+- Build the app with `yarn build`.
+- Run app in Mainframe OS
